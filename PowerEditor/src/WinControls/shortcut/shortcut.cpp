@@ -1139,6 +1139,8 @@ CommandShortcut::CommandShortcut(const Shortcut& sc, long id) :	Shortcut(sc), _i
 		_category = TEXT("Search");
 	else if ( _id < IDM_FORMAT)
 		_category = TEXT("View");
+	else if (_id == IDM_VIEW_GOTO_END)
+		 _category = TEXT("View");
 	else if ( _id >= IDM_VIEW_GOTO_ANOTHER_VIEW and _id <= IDM_VIEW_LOAD_IN_NEW_INSTANCE)
 		_category = TEXT("View");
 	else if ( _id < IDM_LANG)

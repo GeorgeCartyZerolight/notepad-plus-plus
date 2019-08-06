@@ -246,9 +246,11 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 				{
 					if (!_tabPopupDropMenu.isCreated())
 					{
-						TCHAR goToView[32] = TEXT("Move to Other View");
+						TCHAR goToEndView[32] = TEXT("Move to End");
+						TCHAR goToView[32] = TEXT("Move to Other view");
 						TCHAR cloneToView[32] = TEXT("Clone to Other View");
 						vector<MenuItemUnit> itemUnitArray;
+						itemUnitArray.push_back(MenuItemUnit(IDM_VIEW_GOTO_END, goToEndView));
 						itemUnitArray.push_back(MenuItemUnit(IDM_VIEW_GOTO_ANOTHER_VIEW, goToView));
 						itemUnitArray.push_back(MenuItemUnit(IDM_VIEW_CLONE_TO_ANOTHER_VIEW, cloneToView));
 						_tabPopupDropMenu.create(_pPublicInterface->getHSelf(), itemUnitArray, _mainMenuHandle);
@@ -531,6 +533,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 				itemUnitArray.push_back(MenuItemUnit(IDM_EDIT_FILENAMETOCLIP,   TEXT("Filename to Clipboard")));
 				itemUnitArray.push_back(MenuItemUnit(IDM_EDIT_CURRENTDIRTOCLIP, TEXT("Current Dir. Path to Clipboard")));
 				itemUnitArray.push_back(MenuItemUnit(0, NULL));
+				itemUnitArray.push_back(MenuItemUnit(IDM_VIEW_GOTO_END, TEXT("Move to End")));
 				itemUnitArray.push_back(MenuItemUnit(IDM_VIEW_GOTO_ANOTHER_VIEW, TEXT("Move to Other View")));
 				itemUnitArray.push_back(MenuItemUnit(IDM_VIEW_CLONE_TO_ANOTHER_VIEW, TEXT("Clone to Other View")));
 				itemUnitArray.push_back(MenuItemUnit(IDM_VIEW_GOTO_NEW_INSTANCE, TEXT("Move to New Instance")));

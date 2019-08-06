@@ -4246,6 +4246,31 @@ void Notepad_plus::docOpenInNewInstance(FileTransferMode mode, int x, int y)
 	}
 }
 
+void Notepad_plus::docGotoEnd()
+{
+	if (_pDocTab->nbItem() > 1)
+	{
+		BufferID current = _pEditView->getCurrentBufferID();
+		int indexFound = _pDocTab->getIndexByBuffer(current);
+		if (indexFound >= 0)
+		{
+			std::vector<BufferID> tempBufs;
+			for (unsigned int i = 0; i < _pDocTab->nbItem(); ++i)
+			{
+				if (i != (unsigned int)indexFound) tempBufs.push_back(_pDocTab->getBufferByIndex(i));
+			}
+			tempBufs.push_back(_pDocTab->getBufferByIndex(indexFound));
+
+			//Reset buffers
+			for (unsigned int i = 0; i < _pDocTab->nbItem(); ++i)
+			{
+				_pDocTab->setBuffer(i, tempBufs[i]);
+			}
+			activateBuffer(current, currentView());
+		}
+	}
+}
+
 void Notepad_plus::docGotoAnotherEditView(FileTransferMode mode)
 {
 	// Test if it's only doc to transfer on the hidden view

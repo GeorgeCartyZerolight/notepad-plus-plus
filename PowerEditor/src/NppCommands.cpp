@@ -2870,7 +2870,12 @@ void Notepad_plus::command(int id)
             break;
         }
 
-        case IDM_VIEW_GOTO_ANOTHER_VIEW:
+		case IDM_VIEW_GOTO_END:
+			docGotoEnd();
+			checkSyncState();
+			break;
+		
+		case IDM_VIEW_GOTO_ANOTHER_VIEW:
             docGotoAnotherEditView(TransferMove);
 			checkSyncState();
             break;
@@ -3683,6 +3688,7 @@ void Notepad_plus::command(int id)
 			case IDM_VIEW_UNFOLD_6:
 			case IDM_VIEW_UNFOLD_7:
 			case IDM_VIEW_UNFOLD_8:
+			case IDM_VIEW_GOTO_END:
 			case IDM_VIEW_GOTO_ANOTHER_VIEW:
 			case IDM_VIEW_SYNSCROLLV:
 			case IDM_VIEW_SYNSCROLLH:

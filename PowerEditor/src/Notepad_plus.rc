@@ -508,7 +508,8 @@ BEGIN
         END
         POPUP "Move/Clone Current Document"
         BEGIN
-            MENUITEM "Move to Other View",      IDM_VIEW_GOTO_ANOTHER_VIEW
+			MENUITEM "Move to End",             IDM_VIEW_GOTO_END
+			MENUITEM "Move to Other View",      IDM_VIEW_GOTO_ANOTHER_VIEW
             MENUITEM "Clone to Other View",     IDM_VIEW_CLONE_TO_ANOTHER_VIEW
             MENUITEM "Move to New Instance",    IDM_VIEW_GOTO_NEW_INSTANCE
             MENUITEM "Open in New Instance",    IDM_VIEW_LOAD_IN_NEW_INSTANCE

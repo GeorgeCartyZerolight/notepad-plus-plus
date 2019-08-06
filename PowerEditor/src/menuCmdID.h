@@ -356,6 +356,7 @@
     #define    IDM_VIEW_SWITCHTO_FILEBROWSER      (IDM_VIEW + 107)
     #define    IDM_VIEW_SWITCHTO_FUNC_LIST        (IDM_VIEW + 108)
 
+	#define    IDM_VIEW_GOTO_END                 10005
     #define    IDM_VIEW_GOTO_ANOTHER_VIEW        10001
     #define    IDM_VIEW_CLONE_TO_ANOTHER_VIEW    10002
     #define    IDM_VIEW_GOTO_NEW_INSTANCE        10003

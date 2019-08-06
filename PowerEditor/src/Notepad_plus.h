@@ -448,6 +448,7 @@ private:
 
 	int switchEditViewTo(int gid);	//activate other view (set focus etc)
 
+	void docGotoEnd();
 	void docGotoAnotherEditView(FileTransferMode mode);	//TransferMode
 	void docOpenInNewInstance(FileTransferMode mode, int x = 0, int y = 0);
 
