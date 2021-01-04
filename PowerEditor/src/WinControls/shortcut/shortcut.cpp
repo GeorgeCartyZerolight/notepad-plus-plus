@@ -660,6 +660,7 @@ recordedMacroStep::recordedMacroStep(int iMessage, uptr_t wParam, uptr_t lParam,
 			case IDFINDWHAT:
 			case IDREPLACEWITH:
 			case IDD_FINDINFILES_DIR_COMBO:
+			case IDD_FINDINFILES_EXCLUDE_DIR_COMBO:
 			case IDD_FINDINFILES_FILTERS_COMBO:
 			{
 				char *ch = reinterpret_cast<char *>(_lParameter);

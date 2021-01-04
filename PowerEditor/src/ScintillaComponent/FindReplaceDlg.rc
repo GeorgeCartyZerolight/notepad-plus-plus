@@ -41,6 +41,8 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,270,87,94,15
     CONTROL         "In &hidden folders",IDD_FINDINFILES_INHIDDENDIR_CHECK,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,270,101,94,15
+    CONTROL         "Don't follow symbolic lin&ks",IDD_FINDINFILES_NOSYMLINK_CHECK,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,270,115,94,15
     CONTROL         "Project Panel 1",IDD_FINDINFILES_PROJECT1_CHECK,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,270,73,94,15
     CONTROL         "Project Panel 2",IDD_FINDINFILES_PROJECT2_CHECK,
@@ -57,6 +59,8 @@ BEGIN
     CONTROL         "Match &whole word only",IDWHOLEWORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,88,140,15
     CONTROL         "Match &case",IDMATCHCASE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,100,140,15
     CONTROL         "Wra&p around",IDWRAP,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,12,112,140,15
+    RTEXT           "Excluded Directories :",IDD_FINDINFILES_EXCLUDE_DIR_STATIC,6,118,75,8
+    COMBOBOX        IDD_FINDINFILES_EXCLUDE_DIR_COMBO,83,116,178,150,CBS_DROPDOWN | CBS_AUTOHSCROLL | WS_TABSTOP
     GROUPBOX        "Search Mode",IDC_MODE_STATIC,6,131,159,48
     CONTROL         "&Normal",IDNORMAL,"Button",BS_AUTORADIOBUTTON | WS_GROUP,12,143,126,10
     CONTROL         "E&xtended (\\n, \\r, \\t, \\0, \\x...)",IDEXTENDED,

@@ -71,8 +71,10 @@ struct FindOption
 	generic_string _str4Replace;
 	generic_string _filters;
 	generic_string _directory;
+	generic_string _excludedDirectories;
 	bool _isRecursive = true;
 	bool _isInHiddenDir = false;
+	bool _noFollowSymlinks = false;
 	bool _isProjectPanel_1 = false;
 	bool _isProjectPanel_2 = false;
 	bool _isProjectPanel_3 = false;
@@ -269,6 +271,7 @@ public :
 
 	void getPatterns(std::vector<generic_string> & patternVect);
 	void getAndValidatePatterns(std::vector<generic_string> & patternVect);
+	void getExcludeDirs(std::vector<generic_string> & excludeDirsVect);
 
 	void launchFindInFilesDlg() {
 		doDialog(FINDINFILES_DLG);
@@ -291,6 +294,7 @@ public :
 	const FindOption & getCurrentOptions() const {return *_env;};
 	bool isRecursive() const { return _env->_isRecursive; };
 	bool isInHiddenDir() const { return _env->_isInHiddenDir; };
+	bool isFollowingSymlinks() const { return !_env->_noFollowSymlinks; };
 	bool isProjectPanel_1() const { return _env->_isProjectPanel_1; };
 	bool isProjectPanel_2() const { return _env->_isProjectPanel_2; };
 	bool isProjectPanel_3() const { return _env->_isProjectPanel_3; };

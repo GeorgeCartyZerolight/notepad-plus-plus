@@ -2292,6 +2292,21 @@ void NppParameters::feedFindHistoryParameters(TiXmlNode *node)
 	TiXmlNode *findHistoryRoot = node->FirstChildElement(TEXT("FindHistory"));
 	if (!findHistoryRoot) return;
 
+	(findHistoryRoot->ToElement())->Attribute(TEXT("nbMaxFindHistoryExcludePath"), &_findHistory._nbMaxFindHistoryExcludePath);
+	if ((_findHistory._nbMaxFindHistoryExcludePath > 0) && (_findHistory._nbMaxFindHistoryExcludePath <= NB_MAX_FINDHISTORY_EXCLUDEPATH))
+	{
+		for (TiXmlNode *childNode = findHistoryRoot->FirstChildElement(TEXT("ExcludePath"));
+			childNode && (_findHistory._findHistoryExcludePaths.size() < NB_MAX_FINDHISTORY_EXCLUDEPATH);
+			childNode = childNode->NextSibling(TEXT("ExcludePath")) )
+		{
+			const TCHAR *fileExcludePath = (childNode->ToElement())->Attribute(TEXT("name"));
+			if (fileExcludePath)
+			{
+				_findHistory._findHistoryExcludePaths.push_back(generic_string(fileExcludePath));
+			}
+		}
+	}
+
 	(findHistoryRoot->ToElement())->Attribute(TEXT("nbMaxFindHistoryPath"), &_findHistory._nbMaxFindHistoryPath);
 	if (_findHistory._nbMaxFindHistoryPath > NB_MAX_FINDHISTORY_PATH)
 	{
@@ -2391,6 +2406,10 @@ void NppParameters::feedFindHistoryParameters(TiXmlNode *node)
 	boolStr = (findHistoryRoot->ToElement())->Attribute(TEXT("fifInHiddenFolder"));
 	if (boolStr)
 		_findHistory._isFifInHiddenFolder = (lstrcmp(TEXT("yes"), boolStr) == 0);
+
+	boolStr = (findHistoryRoot->ToElement())->Attribute(TEXT("fifSkippingSymlinks"));
+	if (boolStr)
+		_findHistory._isFifSkippingSymlinks = (lstrcmp(TEXT("yes"), boolStr) == 0);
 
 	boolStr = (findHistoryRoot->ToElement())->Attribute(TEXT("fifProjectPanel1"));
 	if (boolStr)
@@ -6343,6 +6362,7 @@ bool NppParameters::writeFindHistory()
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("nbMaxFindHistoryFilter"),  _findHistory._nbMaxFindHistoryFilter);
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("nbMaxFindHistoryFind"),	_findHistory._nbMaxFindHistoryFind);
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("nbMaxFindHistoryReplace"), _findHistory._nbMaxFindHistoryReplace);
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("nbMaxFindHistoryExcludePath"), _findHistory._nbMaxFindHistoryExcludePath);
 
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("matchWord"),				_findHistory._isMatchWord?TEXT("yes"):TEXT("no"));
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("matchCase"),				_findHistory._isMatchCase?TEXT("yes"):TEXT("no"));
@@ -6351,9 +6371,10 @@ bool NppParameters::writeFindHistory()
 
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifRecuisive"),			_findHistory._isFifRecuisive?TEXT("yes"):TEXT("no"));
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifInHiddenFolder"),		_findHistory._isFifInHiddenFolder?TEXT("yes"):TEXT("no"));
-	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifProjectPanel1"),	    	_findHistory._isFifProjectPanel_1?TEXT("yes"):TEXT("no"));
-	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifProjectPanel2"),	      	_findHistory._isFifProjectPanel_2?TEXT("yes"):TEXT("no"));
-	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifProjectPanel3"),	       	_findHistory._isFifProjectPanel_3?TEXT("yes"):TEXT("no"));
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifSkippingSymlinks"),   _findHistory._isFifSkippingSymlinks?TEXT("yes"):TEXT("no"));
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifProjectPanel1"),		_findHistory._isFifProjectPanel_1?TEXT("yes"):TEXT("no"));
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifProjectPanel2"),		_findHistory._isFifProjectPanel_2?TEXT("yes"):TEXT("no"));
+	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifProjectPanel3"),		_findHistory._isFifProjectPanel_3?TEXT("yes"):TEXT("no"));
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifFilterFollowsDoc"),	_findHistory._isFilterFollowDoc?TEXT("yes"):TEXT("no"));
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("fifFolderFollowsDoc"),	_findHistory._isFolderFollowDoc?TEXT("yes"):TEXT("no"));
 
@@ -6365,6 +6386,13 @@ bool NppParameters::writeFindHistory()
 	(findHistoryRoot->ToElement())->SetAttribute(TEXT("regexBackward4PowerUser"),		_findHistory._regexBackward4PowerUser ? TEXT("yes") : TEXT("no"));
 
 	TiXmlElement hist_element{TEXT("")};
+
+	hist_element.SetValue(TEXT("ExcludePath"));
+	for (size_t i = 0, len = _findHistory._findHistoryExcludePaths.size(); i < len; ++i)
+	{
+		(hist_element.ToElement())->SetAttribute(TEXT("name"), _findHistory._findHistoryExcludePaths[i].c_str());
+		findHistoryRoot->InsertEndChild(hist_element);
+	}
 
 	hist_element.SetValue(TEXT("Path"));
 	for (size_t i = 0, len = _findHistory._findHistoryPaths.size(); i < len; ++i)

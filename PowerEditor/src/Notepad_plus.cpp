@@ -1449,7 +1449,7 @@ void Notepad_plus::removeDuplicateLines()
 	_findReplaceDlg.processAll(ProcessReplaceAll, &env, isEntireDoc);
 }
 
-void Notepad_plus::getMatchedFileNames(const TCHAR *dir, const vector<generic_string> & patterns, vector<generic_string> & fileNames, bool isRecursive, bool isInHiddenDir)
+void Notepad_plus::getMatchedFileNames(const TCHAR *dir, const vector<generic_string> & patterns, vector<generic_string> & fileNames, bool isRecursive, bool isInHiddenDir, bool followSymlinks, const vector<generic_string> * excludeDirs)
 {
 	generic_string dirFilter(dir);
 	dirFilter += TEXT("*.*");
@@ -1462,18 +1462,22 @@ void Notepad_plus::getMatchedFileNames(const TCHAR *dir, const vector<generic_st
 
 		if (foundData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
-			if (!isInHiddenDir && (foundData.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN))
+			if (!followSymlinks && (foundData.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT))
+			{
+				// do nothing
+			}
+			else if (!isInHiddenDir && (foundData.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN))
 			{
 				// do nothing
 			}
 			else if (isRecursive)
 			{
-				if ((OrdinalIgnoreCaseCompareStrings(foundData.cFileName, TEXT(".")) != 0) && (OrdinalIgnoreCaseCompareStrings(foundData.cFileName, TEXT("..")) != 0))
+				if ((OrdinalIgnoreCaseCompareStrings(foundData.cFileName, TEXT(".")) != 0) && (OrdinalIgnoreCaseCompareStrings(foundData.cFileName, TEXT("..")) != 0) && ((!excludeDirs) || (!matchInList(foundData.cFileName, *excludeDirs))))
 				{
 					generic_string pathDir(dir);
 					pathDir += foundData.cFileName;
 					pathDir += TEXT("\\");
-					getMatchedFileNames(pathDir.c_str(), patterns, fileNames, isRecursive, isInHiddenDir);
+					getMatchedFileNames(pathDir.c_str(), patterns, fileNames, isRecursive, isInHiddenDir, followSymlinks, excludeDirs);
 				}
 			}
 		}
@@ -1491,18 +1495,22 @@ void Notepad_plus::getMatchedFileNames(const TCHAR *dir, const vector<generic_st
 	{
 		if (foundData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
-			if (!isInHiddenDir && (foundData.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN))
+			if (!followSymlinks && (foundData.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT))
+			{
+				// do nothing
+			}
+			else if (!isInHiddenDir && (foundData.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN))
 			{
 				// do nothing
 			}
 			else if (isRecursive)
 			{
-				if ((OrdinalIgnoreCaseCompareStrings(foundData.cFileName, TEXT(".")) != 0) && (OrdinalIgnoreCaseCompareStrings(foundData.cFileName, TEXT("..")) != 0))
+				if ((OrdinalIgnoreCaseCompareStrings(foundData.cFileName, TEXT(".")) != 0) && (OrdinalIgnoreCaseCompareStrings(foundData.cFileName, TEXT("..")) != 0) && ((!excludeDirs) || (!matchInList(foundData.cFileName, *excludeDirs))))
 				{
 					generic_string pathDir(dir);
 					pathDir += foundData.cFileName;
 					pathDir += TEXT("\\");
-					getMatchedFileNames(pathDir.c_str(), patterns, fileNames, isRecursive, isInHiddenDir);
+					getMatchedFileNames(pathDir.c_str(), patterns, fileNames, isRecursive, isInHiddenDir, followSymlinks, excludeDirs);
 				}
 			}
 		}
@@ -1527,12 +1535,14 @@ bool Notepad_plus::createFilelistForFiles(vector<generic_string> & fileNames)
 		return false;
 	}
 
-	vector<generic_string> patterns2Match;
+	vector<generic_string> patterns2Match, dirsToExclude;
 	_findReplaceDlg.getAndValidatePatterns(patterns2Match);
+	_findReplaceDlg.getExcludeDirs(dirsToExclude);
 
 	bool isRecursive = _findReplaceDlg.isRecursive();
 	bool isInHiddenDir = _findReplaceDlg.isInHiddenDir();
-	getMatchedFileNames(dir2Search, patterns2Match, fileNames, isRecursive, isInHiddenDir);
+	bool followSymlinks = _findReplaceDlg.isFollowingSymlinks();
+	getMatchedFileNames(dir2Search, patterns2Match, fileNames, isRecursive, isInHiddenDir, followSymlinks, &dirsToExclude);
 	return true;
 }
 

@@ -963,6 +963,7 @@ const int NB_MAX_FINDHISTORY_FIND	= 30;
 const int NB_MAX_FINDHISTORY_REPLACE = 30;
 const int NB_MAX_FINDHISTORY_PATH	= 30;
 const int NB_MAX_FINDHISTORY_FILTER  = 20;
+const int NB_MAX_FINDHISTORY_EXCLUDEPATH = 30;
 
 
 const int MASK_ReplaceBySpc = 0x80;
@@ -1164,15 +1165,17 @@ struct FindHistory final
 
 	bool _isSearch2ButtonsMode = false;
 
-	int _nbMaxFindHistoryPath    = 10;
-	int _nbMaxFindHistoryFilter  = 10;
-	int _nbMaxFindHistoryFind    = 10;
-	int _nbMaxFindHistoryReplace = 10;
+	int _nbMaxFindHistoryPath           = 10;
+	int _nbMaxFindHistoryFilter         = 10;
+	int _nbMaxFindHistoryFind           = 10;
+	int _nbMaxFindHistoryReplace        = 10;
+	int _nbMaxFindHistoryExcludePath    = 10;
 
 	std::vector<generic_string> _findHistoryPaths;
 	std::vector<generic_string> _findHistoryFilters;
 	std::vector<generic_string> _findHistoryFinds;
 	std::vector<generic_string> _findHistoryReplaces;
+	std::vector<generic_string> _findHistoryExcludePaths;
 
 	bool _isMatchWord = false;
 	bool _isMatchCase = false;
@@ -1182,6 +1185,7 @@ struct FindHistory final
 
 	bool _isFifRecuisive = true;
 	bool _isFifInHiddenFolder = false;
+	bool _isFifSkippingSymlinks = false;
     bool _isFifProjectPanel_1 = false;
     bool _isFifProjectPanel_2 = false;
     bool _isFifProjectPanel_3 = false;
