@@ -743,16 +743,16 @@ public:
 		return okPressed;
 	}
 
-	BOOL getCheckboxState(int id) const
+	bool getCheckboxState(int id) const
 	{
 		if (_customize)
 		{
 			BOOL bChecked = FALSE;
 			HRESULT hr = _customize->GetCheckButtonState(id, &bChecked);
 			if (SUCCEEDED(hr))
-				return bChecked;
+				return bChecked ? true : false;
 		}
-		return FALSE;
+		return false;
 	}
 
 	generic_string getResultFilename()
@@ -773,7 +773,7 @@ public:
 		SFGAOF attrs = 0;
 		HRESULT hr = psi->GetAttributes(SFGAO_READONLY, &attrs);
 		if (SUCCEEDED(hr))
-			return attrs & SFGAO_READONLY;
+			return (attrs & SFGAO_READONLY) ? true : false;
 		return false;
 	}
 
